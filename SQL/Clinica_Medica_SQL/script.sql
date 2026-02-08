@@ -1,72 +1,115 @@
-create database atividade8
-use atividade8;
+-- =========================================
+-- Projeto: Clínica Médica
+-- Banco: SQL Server
+-- Descrição:
+-- Script acadêmico com criação de banco e tabela,
+-- inserção de dados e uso de funções de string
+-- =========================================
 
-create table medicos (
-idMedico		int identity primary key,
-nome			varchar(40) not null,
-sobrenome		varchar(20) not null,
-inicias			varchar(1) not null,
-cpf				varchar(20) null,
-especialidade	varchar(50) not null,
-cidade			varchar(30) not null,
-telefone		varchar(20) null,
-email			varchar(50) null,
-salario			decimal(10,2) not null
+-- Criação do banco de dados
+CREATE DATABASE atividade8;
+
+-- Seleciona o banco para uso
+USE atividade8;
+
+-- =========================================
+-- Criação da tabela MEDICOS
+-- Armazena dados cadastrais dos médicos
+-- =========================================
+CREATE TABLE medicos (
+    idMedico        INT IDENTITY PRIMARY KEY, -- Identificador único do médico
+    nome            VARCHAR(40) NOT NULL,     -- Nome do médico
+    sobrenome       VARCHAR(20) NOT NULL,     -- Sobrenome do médico
+    inicias         VARCHAR(1) NOT NULL,      -- Inicial do nome
+    cpf             VARCHAR(20) NULL,         -- CPF (opcional)
+    especialidade   VARCHAR(50) NOT NULL,     -- Especialidade médica
+    cidade          VARCHAR(30) NOT NULL,     -- Cidade de atuação
+    telefone        VARCHAR(20) NULL,         -- Telefone de contato
+    email           VARCHAR(50) NULL,         -- E-mail de contato
+    salario         DECIMAL(10,2) NOT NULL    -- Salário
 );
 
+-- =========================================
+-- Inserção de dados na tabela MEDICOS
+-- =========================================
+INSERT INTO medicos VALUES (' João ','augusto','J','12345678901','Cardiologia','Agudos',NULL,'joao.silva@hospital.com',2300);
+INSERT INTO medicos VALUES ('Ana ','Ribeiro','A',NULL,'Ortopedia','Bauru','11988887777',NULL,900);
+INSERT INTO medicos VALUES (' CARLOS ','Bueno','C','45678912300','Ortopedia','Lençois Paulista','11977776666','carlos.pereira@hospital.com',1900);
+INSERT INTO medicos VALUES ('Maria ','Souza','M','78945612300','Pediatria','São Paulo',NULL,'mariaolivei@gmail.com',3200);
+INSERT INTO medicos VALUES ('Paulo ','costa','P',NULL,'Dermatologia','Avaré',NULL,'paulo.costa@hospital.com',4000);
+INSERT INTO medicos VALUES (' FERNANDA','Lima','F','65432198700','Cardiologia','Bauru','11944443333','fernanda.lima@hospital.com',3764);
 
+-- =========================================
+-- Consultas básicas
+-- =========================================
 
-insert into medicos values(' João ','augusto','J', '12345678901', 'Cardiologia','Agudos', null, 'joao.silva@hospital.com',2300);
-insert into medicos values('Ana ','Ribeiro','A', null, 'Ortopedia','Bauru', '11988887777', null,900);
-insert into medicos values(' CARLOS ','Bueno','C', '45678912300', 'Ortopedia','Lençois Paulista', '11977776666', 'carlos.pereira@hospital.com',1900);
-insert into medicos values('Maria ','Souza','M', '78945612300', 'Pediatria','São Paulo', null,'mariaolivei@gmail.com',3200);
-insert into medicos values('Paulo ','costa','P', null, 'Dermatologia','Avaré', null, 'paulo.costa@hospital.com',4000);
-insert into medicos values(' FERNANDA','Lima','F', '65432198700', 'Cardiologia','Bauru', '11944443333', 'fernanda.lima@hospital.com',3764);
-select * from medicos
+-- Retorna todos os registros da tabela
+SELECT * FROM medicos;
 
+-- Retorna o nome em letras maiúsculas
+SELECT UPPER(nome) FROM medicos;
 
-select upper(nome) from medicos;
+-- Retorna o sobrenome em letras minúsculas
+SELECT LOWER(sobrenome) FROM medicos;
 
-select lower(sobrenome) from medicos;
+-- =========================================
+-- Atualizações e limpeza de dados
+-- =========================================
 
+-- Atualiza o sobrenome para letras maiúsculas
+UPDATE medicos
+SET sobrenome = UPPER(sobrenome); -- alteração definitiva
 
-update medicos 
-set sobrenome = upper(sobrenome);--update para alterar definitivo 
+-- Lista os médicos ordenados pelo nome
+SELECT * 
+FROM medicos
+ORDER BY nome;
 
-select * from medicos
-order by nome;
+-- Remove espaços em branco antes e depois do nome
+UPDATE medicos
+SET nome = TRIM(nome);
 
+-- Retorna a primeira letra da especialidade
+SELECT SUBSTRING(especialidade,1,1) AS 'iniciais da especialidade'
+FROM medicos;
 
-update medicos
-set nome = trim(nome);
+-- Altera o tamanho da coluna inicias
+ALTER TABLE medicos
+ALTER COLUMN inicias VARCHAR(5) NOT NULL;
 
-select substring(especialidade,1,1)'iniciais da especialidade' from medicos;
+-- Atualiza as iniciais com base na especialidade
+UPDATE medicos
+SET inicias = SUBSTRING(especialidade,1,4);
 
-alter table medicos 
-alter column inicias varchar(5) not null;
+-- Exibe os dados atualizados
+SELECT * FROM medicos;
 
-update medicos
-set inicias = substring(especialidade,1,4);
+-- =========================================
+-- Exemplos de funções de string
+-- =========================================
 
-select * from medicos
+-- Exemplo da função REPLACE
+SELECT REPLACE('carlos','s','s');
 
-select replace ('carlos','s','s');
+-- Substitui o nome 'carlos' por 'Ursolino' na tabela
+UPDATE medicos
+SET nome = REPLACE(nome,'carlos','Ursolino');
 
+-- Substitui todo o sobrenome por 'Urso'
+UPDATE medicos
+SET sobrenome = REPLACE(sobrenome,sobrenome,'Urso');
 
-update medicos 
-set nome = replace(nome,'carlos','Ursolino');
+SELECT * FROM medicos;
 
+-- Exemplos adicionais de funções
+SELECT UPPER(nome) FROM medicos;
+SELECT LOWER(nome) FROM medicos;
+SELECT LTRIM(RTRIM(nome)) FROM medicos;
 
-update medicos
-set sobrenome = replace(sobrenome,sobrenome,'Urso');
-select * from medicos
+-- Atualizações finais
+UPDATE medicos SET inicias = SUBSTRING(especialidade,1,4);
+UPDATE medicos SET sobrenome = REPLACE(sobrenome,sobrenome,'URSO');
 
-
-select upper(nome) from medicos;
-select lower(nome) from medicos;
-select ltrim(rtrim(nome)) from medicos;
-update medicos set inicias = substring(especialidade,1,4);
-update medicos set sobrenome = replace(sobrenome,sobrenome,'URSO');
-select stuff('carlos',1,5,'Marcio');
-
+-- Exemplo da função STUFF
+SELECT STUFF('carlos',1,5,'Marcio');
 
